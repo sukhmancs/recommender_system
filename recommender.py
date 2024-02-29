@@ -11,10 +11,14 @@ from csv import DictReader
 from random import randint
 import json
 import pandas as pd
+import spacy
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import pickle
 import os
+
+# Load spaCy model
+#nlp = spacy.load("en_core_web_md")
 
 NUM_RECS = 101 # number of recommendations to return to the user
 
@@ -101,6 +105,10 @@ def display_article(art_num, articles, with_text=False):
         print(articles.iloc[art_num]["text"])
     print("=========================================")
     print("\n\n")
+
+# def preprocess_text(text):
+#      doc = nlp(text)
+#      return " ".join([token.lemma_ for token in doc if not token.is_stop])
 
 def vectorize_documents(documents):
     """
@@ -236,7 +244,6 @@ def main():
         with open('tfidf_matrix.pkl', 'rb') as f:
             tfidf_matrix = pickle.load(f)
     else: # Otherwise, create the matrix and save it to a file
-        print("Creating the matrix...")
         tfidf_matrix = vectorize_documents(documents)
         # Save the matrix to a file
         with open('tfidf_matrix.pkl', 'wb') as f:
